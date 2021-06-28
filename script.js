@@ -1,15 +1,17 @@
 "use strict";
 
-const numberButtons = document.querySelectorAll('.numbers button');
 const generate = document.querySelector('.generate');
-const totalNumArr = [...numberButtons];
+const arrayOfNormalNumbers = [...document.querySelectorAll('.numbers button')];
+const arrayOfJokerNumbers = [...document.querySelectorAll('.jokers button')];
+const title = document.querySelector('.title');
 
 let array;
 let randomNum;
+let randomJoker;
 
 const generateRandomNumbers = () => {
 	for (let i = 0; array.length < 5; i++) {
-		randomNum = String(Math.round(Math.random() * 45));
+		randomNum = String(Math.round(Math.random() * 44) + 1);
 		if (randomNum < 10) {
 			randomNum = "0" + randomNum;
 			if (array.indexOf(randomNum) < 0) {
@@ -24,29 +26,42 @@ const generateRandomNumbers = () => {
 }
 
 function findNumbers() {
-	for (let i = 0; i < totalNumArr.length; i++) {
+	for (let i = 0; i < arrayOfNormalNumbers.length; i++) {
 		for (let z = 0; z < 5; z++) {
-			if (totalNumArr[i].textContent === array[z]) {
-				totalNumArr[i].style.backgroundColor = "coral";
+			if (arrayOfNormalNumbers[i].textContent === array[z]) {
+				arrayOfNormalNumbers[i].style.backgroundColor = "coral";
 			}
 		}
 	}
 }
 
+function findJoker() {
+	for (let i = 0; i < arrayOfJokerNumbers.length; i++) {
+		if (arrayOfJokerNumbers[i].textContent === randomJoker) {
+			arrayOfJokerNumbers[i].style.backgroundColor = "silver";
+		}
+	}
+}
+
+function clearResults() {
+	arrayOfNormalNumbers.forEach(number => {
+		number.style.backgroundColor = "";
+	});
+	arrayOfJokerNumbers.forEach(joker => {
+		joker.style.backgroundColor = "";
+	})
+}
+
 generate.addEventListener('click', () => {
-	let timerId = setInterval(() => {
+	let onTimer = setInterval(() => {
 		array = [];
+		randomJoker = String(Math.round(Math.random() * 19) + 1);
 		clearResults();
 		generateRandomNumbers();
 		findNumbers();
-	}, 150);
+		findJoker();
+	}, 100);
 	setTimeout(() => {
-		clearInterval(timerId);
-	}, 3000);
+		clearInterval(onTimer);
+	}, 2000);
 });
-
-function clearResults() {
-	totalNumArr.forEach(number => {
-		number.style.backgroundColor = "";
-	})
-}
